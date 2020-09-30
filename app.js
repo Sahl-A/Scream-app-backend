@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 
 const screamsRoutes = require("./routes/screams");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -63,6 +64,7 @@ app.use((req, res, next) => {
 ///// Routes /////
 //////////////////
 app.use("/api", screamsRoutes);
+app.use("/api", authRoutes);
 
 // Error
 app.use((error, req, res, next) => {
