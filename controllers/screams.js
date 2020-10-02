@@ -2,7 +2,7 @@
 const Scream = require("../models/scream");
 
 // When using GET /api/screams
-exports.getScreams = async (req, res, next) => {
+exports.getAllScreams = async (req, res, next) => {
   try {
     // Get the screams from  DB 
     // Sort it newer to older
@@ -17,11 +17,11 @@ exports.getScreams = async (req, res, next) => {
 };
 
 // When using POST api/scream
-exports.createScreams = async (req, res, next) => {
+exports.postOneScream = async (req, res, next) => {
   // Get the data
   const data = {
     body: req.body.body,
-    userHandle: req.body.userHandle,
+    userHandle: req.user.handle,
   };
   const newScream = new Scream(data);
   try {

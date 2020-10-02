@@ -2,7 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const bcrypt = require("bcrypt");
 
-const authControllers = require("../controllers/auth");
+const userControllers = require("../controllers/user");
 const User = require("../models/user");
 
 const router = express.Router();
@@ -51,7 +51,7 @@ router.post(
         return true;
       }),
   ],
-  authControllers.signup
+  userControllers.signup
 );
 
 // When clicking in login button
@@ -95,7 +95,8 @@ router.post(
         }
       }),
   ],
-  authControllers.login
+  userControllers.login
 );
+
 
 module.exports = router;

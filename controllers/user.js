@@ -49,19 +49,21 @@ exports.login = async (req, res, next) => {
 
   try {
     // Get the user to get its id
-    const user = await User.findOne({email})
+    const user = await User.findOne({ email });
     // Generate the token
     const token = jwt.sign(
-        { email: user.email, userId: user._id },
-        "SECRET KEY TO GENERATEE THE TOKEN<, SHOULD BE COMPLICATED",
-        { expiresIn: "1h" }
-      );
-      // Send the token back
-      res.status(200).json({
-        token,
-        userId: user._id,
-      });
+      { email: user.email, _id: user._id, handle: user.handle },
+      "SECRET KEY TO GENERATEE THE TOKEN<, SHOULD BE COMPLICATED",
+      { expiresIn: "1h" }
+    );
+    // Send the token back
+    res.status(200).json({
+      token,
+      userId: user._id,
+    });
   } catch (err) {
-      res.status(500).json({err: err.code})
+    res.status(500).json({ err: err.code });
   }
 };
+
+

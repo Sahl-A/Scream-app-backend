@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 
 const screamsRoutes = require("./routes/screams");
-const authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/user");
 
 const app = express();
 
