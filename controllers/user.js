@@ -7,6 +7,8 @@ const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
 
+const HOST_URL = `http://localhost:8080`;
+
 exports.signup = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -27,6 +29,7 @@ exports.signup = async (req, res, next) => {
       email,
       password: hash,
       handle,
+      imageUrl: `${HOST_URL}/images/default-profile-picture1.jpg`
     }).save();
 
     res
@@ -66,4 +69,19 @@ exports.login = async (req, res, next) => {
   }
 };
 
-
+exports.uploadImage = async (req, res, next) => {
+  if(!req.file) {
+    return res.status(500).json({message: 'Cannot upload '})
+  }
+  const imageUrl = `${HOST_URL}/images/${req.file.filename}`;
+  try {
+    // get the current user and Add the image to it
+    const user = await User.findOne({ email: req.user.email });
+    user.imageUrl = [...user.imageUrl, imageUrl];
+    await user.save();
+    res.status(201).json({ imageUrl });
+  } catch (err) {
+    res.status(500).json({ err: err.code });
+    console.error(err);
+  }
+};

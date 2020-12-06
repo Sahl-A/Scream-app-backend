@@ -15,7 +15,10 @@ const userSchema = new mongoose.Schema({
   handle: {
     type: String,
     required: true
-  }
+  },
+  imageUrl: [
+    {type: String }
+  ]
 }, {timestamps: true});
 
 module.exports = mongoose.model('User', userSchema);

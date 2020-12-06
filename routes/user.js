@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 
 const userControllers = require("../controllers/user");
 const User = require("../models/user");
+const isAuth = require("../middlewares/is-auth");
 
 const router = express.Router();
 
@@ -98,5 +99,6 @@ router.post(
   userControllers.login
 );
 
-
+// When uploading profile pic
+router.post("/user/image", isAuth, userControllers.uploadImage);
 module.exports = router;

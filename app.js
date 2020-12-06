@@ -15,8 +15,8 @@ const fileStorage = multer.diskStorage({
     cb(null, "images");
   },
   filename: (req, file, cb) => {
-    const currData = new Date().toDateString().split(" ").join("-");
-    cb(null, currData + "-" + file.originalname);
+    const currData = new Date().toISOString().split(":").join("-");
+    cb(null, currData + "-" + file.originalname.replace(/ /g, "-"));
   },
 });
 
@@ -37,7 +37,6 @@ const fileFilter = (req, file, cb) => {
 ////////////////////////////
 // When we get data from <form>. It uses x-www-form-urlencoded format
 // app.use(bodyParser.urlencoded())  // x-www-form-urlencoded  <form>
-
 // When we get data as json. It uses application/json format
 app.use(bodyParser.json()); // application/json
 
