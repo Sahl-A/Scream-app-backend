@@ -9,6 +9,7 @@ const isAuth = require("../middlewares/is-auth");
 const router = express.Router();
 
 // When clicking on sign up button in signup page
+// /api/signup
 router.post(
   "/signup",
   [
@@ -56,6 +57,7 @@ router.post(
 );
 
 // When clicking in login button
+// /api/login
 router.post(
   "/login",
   [
@@ -99,6 +101,15 @@ router.post(
   userControllers.login
 );
 
+// Add user details (bio, website & location)
+// /api/user
+router.post('/user', isAuth, userControllers.addUserDetails)
+
+// Get the user details 
+// /api/getAuthenticatedUser
+router.get('/user', isAuth, userControllers.getAuthenticatedUser)
+
 // When uploading profile pic
+// /api/user/image
 router.post("/user/image", isAuth, userControllers.uploadImage);
 module.exports = router;
