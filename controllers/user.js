@@ -55,7 +55,12 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email });
     // Generate the token
     const token = jwt.sign(
-      { email: user.email, _id: user._id, handle: user.handle },
+      {
+        email: user.email,
+        _id: user._id,
+        handle: user.handle,
+        imageUrl: user.imageUrl[user.imageUrl.length - 1],
+      },
       "SECRET KEY TO GENERATEE THE TOKEN<, SHOULD BE COMPLICATED",
       { expiresIn: "500h" }
     );
@@ -109,7 +114,7 @@ exports.getAuthenticatedUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (user) {
-      userData.credentials = {...user._doc};
+      userData.credentials = { ...user._doc };
       // Create dummy likes variable now,
       // later will get the likes done by this specific user when we create the likes collection
       userData.likes = [];

@@ -9,4 +9,13 @@ const router = express.Router();
 router.get("/screams", screamsController.getAllScreams);
 // POST /api/scream
 router.post("/scream",isAuth, screamsController.postOneScream);
+// Get One scream
+router.get('/scream/:screamId', screamsController.getOneScream);
+// Comment on Scream
+router.post('/scream/:screamId/comment',isAuth, screamsController.commentOnScream);
+// Like Scream
+// Unlike Scream
+// Delete Scream
+
+
 module.exports = router;
