@@ -13,9 +13,10 @@ router.post("/scream",isAuth, screamsController.postOneScream);
 router.get('/scream/:screamId', screamsController.getOneScream);
 // Comment on Scream
 router.post('/scream/:screamId/comment',isAuth, screamsController.commentOnScream);
-// Like Scream
-// Unlike Scream
+// Like & Unlike Scream
+router.get('/scream/:screamId/like-unlike', isAuth, screamsController.likeUnlikeScream);
 // Delete Scream
+router.delete('/scream/:screamId', isAuth, screamsController.deleteScream);
 
 
 module.exports = router;
