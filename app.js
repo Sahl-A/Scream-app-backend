@@ -7,6 +7,9 @@ const multer = require("multer");
 const screamsRoutes = require("./routes/screams");
 const authRoutes = require("./routes/user");
 
+const onDBCommentChange = require("./middlewares/dbChangeStreams/commentChange");
+const onDBLikeChange = require("./middlewares/dbChangeStreams/likeChange");
+
 const app = express();
 
 ///////////////// Disk Storage /////////////////
@@ -60,6 +63,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Change Streams for the db
+////////////////////////////
+app.use(onDBCommentChange);
+app.use(onDBLikeChange);
+
 ///// Routes /////
 //////////////////
 app.use("/api", screamsRoutes);
@@ -77,10 +85,14 @@ app.use((error, req, res, next) => {
 ///// Add Mongoose /////
 ////////////////////////
 mongoose
-  .connect("mongodb://localhost:27017/screams-app", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  // mongodb://localhost:27017/screams-app
+  .connect(
+    "mongodb+srv://SocialNetwork-classed:vT3dDbh5J3gH8Hz@cluster0.jrht3.mongodb.net/screams-app?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then((res) => {
     app.listen(8080);
   })

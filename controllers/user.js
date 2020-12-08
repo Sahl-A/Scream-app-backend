@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
+const Scream = require("../models/scream");
 
 const HOST_URL = `http://localhost:8080`;
 
@@ -91,7 +92,7 @@ exports.addUserDetails = async (req, res, next) => {
   }
 };
 
-// Get the user details
+// Get pwn the user details
 exports.getAuthenticatedUser = async (req, res, next) => {
   // userData Example
   /*   const userData = {
@@ -126,8 +127,39 @@ exports.getAuthenticatedUser = async (req, res, next) => {
   }
 };
 
-// Get own user details
-// credientials , likes & comments
+// Get general user details without authentication
+exports.getUserDetails = async (req, res) => {
+  const userName = req.params.handle;
+  let data;
+  try {
+    const currUser = await User.findOne({ handle: userName });
+    // Exit if user does not exist
+    if (!currUser)
+      return res.status(404).json({ error: "User Does not exist" });
+
+    // Get all screams posted by this user
+    const screams = await Scream.find({ userHandle: userName }).sort({
+      createdAt: "desc",
+    });
+
+    // Return the needed data from user
+    data = {
+      user: {
+        imageUrl: currUser.imageUrl[currUser.imageUrl.length - 1],
+        createdAt: currUser.createdAt,
+        handle: currUser.handle,
+        email: currUser.email,
+        _id: currUser._id,
+      },
+      screams,
+    };
+
+    return res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.code });
+  }
+};
 
 exports.uploadImage = async (req, res, next) => {
   if (!req.file) {

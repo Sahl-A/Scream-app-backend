@@ -51,4 +51,14 @@ const db = {
       body: "this is irrelevant scream to the world",
     },
   ],
+  notifications: [
+    {
+      recepient: "user",
+      sender: "john",
+      read: "true | false",
+      screamId: "3458*F(*W$H",
+      type: "like | comment",
+      createdAt: "time stamp",
+    },
+  ],
 };

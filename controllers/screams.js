@@ -2,6 +2,7 @@
 const Scream = require("../models/scream");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
+const Notification = require("../models/notification");
 
 // When using GET /api/screams
 exports.getAllScreams = async (req, res, next) => {
@@ -69,7 +70,7 @@ exports.commentOnScream = async (req, res) => {
   };
   // No empty body
   if (data.body.trim() === "")
-    return res.status(400).json({ error: "Must not be empty" });
+    return res.status(400).json({ comment: "Must not be empty" });
 
   try {
     // Check if the scream is found

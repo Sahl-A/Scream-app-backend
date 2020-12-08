@@ -105,9 +105,13 @@ router.post(
 // /api/user
 router.post('/user', isAuth, userControllers.addUserDetails)
 
-// Get the user details 
+// Get the own user details 
 // /api/getAuthenticatedUser
-router.get('/user', isAuth, userControllers.getAuthenticatedUser)
+router.get('/user', isAuth, userControllers.getAuthenticatedUser);
+
+// Get any user details without being authunticated
+//  /api/user/:handle
+router.get('/user/:handle', userControllers.getUserDetails)
 
 // When uploading profile pic
 // /api/user/image
