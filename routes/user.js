@@ -86,6 +86,8 @@ router.post(
         try {
           // Get the user from DB to get the hashed Password
           const user = await User.findOne({ email: req.body.email });
+          // Check user, as it might not be found cause body('password') is going to run anyway
+          if(!user) return
           // Compare the passwords
           const isPasswordMatch = await bcrypt.compare(value, user.password);
           if (!isPasswordMatch) {
