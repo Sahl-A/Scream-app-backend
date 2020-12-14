@@ -33,9 +33,22 @@ exports.signup = async (req, res, next) => {
       imageUrl: `${HOST_URL}/images/default-profile-picture1.jpg`,
     }).save();
 
-    res
-      .status(201)
-      .json({ message: `user ${user._id} has been created successfully` });
+    // Generate the token
+    const token = jwt.sign(
+      {
+        email: user.email,
+        _id: user._id,
+        handle: user.handle,
+        imageUrl: user.imageUrl[user.imageUrl.length - 1],
+      },
+      "SECRET KEY TO GENERATEE THE TOKEN<, SHOULD BE COMPLICATED",
+      { expiresIn: "500h" }
+    );
+
+    res.status(201).json({
+      token,
+      userId: user._id,
+    });
   } catch (err) {
     res.status(500).json({ error: err });
     console.error(err);
@@ -52,7 +65,7 @@ exports.login = async (req, res, next) => {
   }
 
   try {
-    // Get the user to get its id
+    // Get the user from DB
     const user = await User.findOne({ email });
     // Generate the token
     const token = jwt.sign(

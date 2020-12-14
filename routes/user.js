@@ -21,7 +21,7 @@ router.post(
         // Check if the email exists in DB
         const user = await User.findOne({ email: value });
         if (user) {
-          return Promise.reject("E-mail already in use");
+          return Promise.reject("Email already in use");
         }
         return true;
       })
@@ -43,7 +43,7 @@ router.post(
     body("handle")
       .trim()
       .isLength({ min: 4 })
-      .withMessage("Handle should be 4 chars at least")
+      .withMessage("Username should be 4 chars at least")
       .custom(async (value) => {
         // Check if the email exists in DB
         const user = await User.findOne({ handle: value });
@@ -67,11 +67,11 @@ router.post(
       .custom(async (value) => {
         // To check if email is empty
         if (!value) {
-          return Promise.reject("Please Enter an Email");
+          return Promise.reject("Please Enter an email");
         }
         const user = await User.findOne({ email: value });
         if (!user) {
-          throw new Error("Invalid E-mail");
+          throw new Error("Invalid email");
         }
         return true;
       })
