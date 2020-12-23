@@ -9,7 +9,16 @@ const User = require("../models/user");
 const Scream = require("../models/scream");
 const Like = require("../models/like");
 
-const HOST_URL = `http://localhost:8080`;
+const environment = process.env.NODE_ENV || "development";
+
+const port = process.env.PORT || 8080;
+let HOST_URL;
+
+if (environment === "development") {
+  HOST_URL = `http://localhost:8080`;
+} else {
+  HOST_URL = `https://discoverit-backend.herokuapp.com:${port}`;
+}
 
 exports.signup = async (req, res, next) => {
   const email = req.body.email;
