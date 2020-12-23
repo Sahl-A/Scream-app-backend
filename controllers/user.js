@@ -7,6 +7,7 @@ const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
 const Scream = require("../models/scream");
+const Like = require("../models/like");
 
 const HOST_URL = `http://localhost:8080`;
 
@@ -105,7 +106,7 @@ exports.addUserDetails = async (req, res, next) => {
   }
 };
 
-// Get pwn the user details
+// Get  the user own details when he is authenticated
 exports.getAuthenticatedUser = async (req, res, next) => {
   // userData Example
   /*   const userData = {
@@ -128,10 +129,11 @@ exports.getAuthenticatedUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (user) {
+      // Get the likes belong to the user
+      const likes = await Like.find({ userHandle: req.user.handle });
+      // Prepare the data to be sent
       userData.credentials = { ...user._doc };
-      // Create dummy likes variable now,
-      // later will get the likes done by this specific user when we create the likes collection
-      userData.likes = [];
+      userData.likes = likes.length ? likes : [];
     }
     res.json(userData);
   } catch (err) {
@@ -162,6 +164,9 @@ exports.getUserDetails = async (req, res) => {
         createdAt: currUser.createdAt,
         handle: currUser.handle,
         email: currUser.email,
+        bio: currUser.bio,
+        location: currUser.location,
+        website: currUser.website,
         _id: currUser._id,
       },
       screams,

@@ -1,5 +1,5 @@
 {
-  "name": "scream_together_backend",
+  "name": "discoverit_backend",
   "version": "1.0.0",
   "description": "The backend of scream-together app",
   "main": "index.js",
@@ -12,6 +12,7 @@
   "dependencies": {
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
     "jsonwebtoken": "^8.5.1",

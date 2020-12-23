@@ -1,3 +1,4 @@
+require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -7,10 +8,12 @@ const multer = require("multer");
 const screamsRoutes = require("./routes/screams");
 const authRoutes = require("./routes/user");
 
-const onDBCommentChange = require("./middlewares/dbChangeStreams/commentChange");
-const onDBLikeChange = require("./middlewares/dbChangeStreams/likeChange");
+/* const onDBCommentChange = require("./middlewares/dbChangeStreams/commentChange");
+const onDBLikeChange = require("./middlewares/dbChangeStreams/likeChange"); */
 
 const app = express();
+const port = process.env.PORT || 8080;
+const dbPass = process.env.DB_PASS;
 
 ///////////////// Disk Storage /////////////////
 const fileStorage = multer.diskStorage({
@@ -65,8 +68,8 @@ app.use((req, res, next) => {
 
 // Change Streams for the db
 ////////////////////////////
-app.use(onDBCommentChange);
-app.use(onDBLikeChange);
+/* app.use(onDBCommentChange);
+app.use(onDBLikeChange); */
 
 ///// Routes /////
 //////////////////
@@ -75,7 +78,7 @@ app.use("/api", authRoutes);
 
 // Error
 app.use((error, req, res, next) => {
-  console.log(error);
+  console.error(error);
   const status = error.statusCode || 500;
   res.status(status).json({
     message: error.message,
@@ -87,13 +90,14 @@ app.use((error, req, res, next) => {
 mongoose
   // mongodb://localhost:27017/screams-app
   .connect(
-    "mongodb+srv://SocialNetwork-classed:vT3dDbh5J3gH8Hz@cluster0.jrht3.mongodb.net/screams-app?retryWrites=true&w=majority",
+    `mongodb+srv://SocialNetwork-classed:${dbPass}@cluster0.jrht3.mongodb.net/screams-app?retryWrites=true&w=majority`,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      poolSize: 100,
     }
   )
   .then((res) => {
-    app.listen(8080);
+    app.listen(port);
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.error(err));
