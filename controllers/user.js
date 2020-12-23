@@ -17,7 +17,7 @@ let HOST_URL;
 if (environment === "development") {
   HOST_URL = `http://localhost:8080`;
 } else {
-  HOST_URL = `https://discoverit-backend.herokuapp.com:${port}`;
+  HOST_URL = `https://discoverit-backend.herokuapp.com`;
 }
 
 exports.signup = async (req, res, next) => {
@@ -52,7 +52,7 @@ exports.signup = async (req, res, next) => {
         imageUrl: user.imageUrl[user.imageUrl.length - 1],
       },
       "SECRET KEY TO GENERATEE THE TOKEN<, SHOULD BE COMPLICATED",
-      { expiresIn: "500h" }
+      { expiresIn: "1h" }
     );
 
     res.status(201).json({
@@ -86,7 +86,7 @@ exports.login = async (req, res, next) => {
         imageUrl: user.imageUrl[user.imageUrl.length - 1],
       },
       "SECRET KEY TO GENERATEE THE TOKEN<, SHOULD BE COMPLICATED",
-      { expiresIn: "500h" }
+      { expiresIn: "1h" }
     );
     // Send the token back
     res.status(200).json({
