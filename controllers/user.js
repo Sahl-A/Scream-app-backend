@@ -33,6 +33,8 @@ exports.signup = async (req, res, next) => {
       password: hash,
       handle,
       imageUrl: `https://res.cloudinary.com/sahlkhalifa/image/upload/v1608831917/DiscoverIt/default_profile_pic.jpg`,
+      currImageUrl:
+        "https://res.cloudinary.com/sahlkhalifa/image/upload/v1608831917/DiscoverIt/default_profile_pic.jpg",
     }).save();
 
     // Generate the token
@@ -41,7 +43,9 @@ exports.signup = async (req, res, next) => {
         email: user.email,
         _id: user._id,
         handle: user.handle,
-        imageUrl: user.imageUrl[user.imageUrl.length - 1],
+        imageUrl: user.currImageUrl,
+        // Now it is not used, It will be used when add the functionality to see all the profile pictures of the user
+        profilePictures: user.imageUrl,
       },
       "SECRET KEY TO GENERATEE THE TOKEN<, SHOULD BE COMPLICATED",
       { expiresIn: "1h" }
@@ -75,7 +79,9 @@ exports.login = async (req, res, next) => {
         email: user.email,
         _id: user._id,
         handle: user.handle,
-        imageUrl: user.imageUrl[user.imageUrl.length - 1],
+        imageUrl: user.currImageUrl,
+        // Now it is not used, It will be used when add the functionality to see all the profile pictures of the user
+        profilePictures: user.imageUrl,
       },
       "SECRET KEY TO GENERATEE THE TOKEN<, SHOULD BE COMPLICATED",
       { expiresIn: "1h" }
@@ -212,6 +218,7 @@ exports.uploadImage = async (req, res, next) => {
     // get the current user and Add the image to it
     const user = await User.findOne({ email: req.user.email });
     user.imageUrl = [...user.imageUrl, imageUrl];
+    user.currImageUrl = imageUrl;
     await user.save();
     res.status(201).json({ imageUrl });
   } catch (err) {

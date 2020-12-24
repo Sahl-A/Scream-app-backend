@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     imageUrl: [{ type: String }],
+    currImageUrl: { type: String },
     bio: { type: String },
     website: { type: String },
     location: { type: String },

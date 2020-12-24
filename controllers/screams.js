@@ -2,7 +2,6 @@
 const Scream = require("../models/scream");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
-const Notification = require("../models/notification");
 
 // When using GET /api/screams
 exports.getAllScreams = async (req, res, next) => {
@@ -21,11 +20,14 @@ exports.getAllScreams = async (req, res, next) => {
 
 // When using POST api/scream
 exports.postOneScream = async (req, res, next) => {
+  // If user changed profile pic and posts a new post without logging out, it will use the old profile pic,
+  // So, we will fetch the userImage from DB directly not from the token as used with the rest
+  const user = await User.findOne({ handle: req.user.handle });
   // Get the data
   const data = {
     body: req.body.body,
     userHandle: req.user.handle,
-    userImage: req.user.imageUrl,
+    userImage: user.currImageUrl,
     likeCount: 0,
     commentCount: 0,
   };
@@ -62,11 +64,14 @@ exports.getOneScream = async (req, res, next) => {
 // Comment on scream
 exports.commentOnScream = async (req, res) => {
   const screamId = req.params.screamId;
+  // If user changed profile pic and posts a new post without logging out, it will use the old profile pic,
+  // So, we will fetch the userImage from DB directly not from the token as used with the rest
+  const user = await User.findOne({ handle: req.user.handle });
   const data = {
     screamId,
     body: req.body.body,
     userHandle: req.user.handle,
-    userImage: req.user.imageUrl,
+    userImage: user.currImageUrl,
   };
   // No empty body
   if (data.body.trim() === "")
