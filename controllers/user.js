@@ -2,23 +2,15 @@
 const bcrypt = require("bcrypt");
 // Generate the token
 const jwt = require("jsonwebtoken");
+// Use cloudinary
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
 // get the validation errors
 const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
 const Scream = require("../models/scream");
 const Like = require("../models/like");
-
-const environment = process.env.NODE_ENV || "development";
-
-const port = process.env.PORT || 8080;
-let HOST_URL;
-
-if (environment === "development") {
-  HOST_URL = `http://localhost:8080`;
-} else {
-  HOST_URL = `https://discoverit-backend.herokuapp.com`;
-}
 
 exports.signup = async (req, res, next) => {
   const email = req.body.email;
@@ -40,7 +32,7 @@ exports.signup = async (req, res, next) => {
       email,
       password: hash,
       handle,
-      imageUrl: `${HOST_URL}/images/default-profile-picture1.jpg`,
+      imageUrl: `https://res.cloudinary.com/sahlkhalifa/image/upload/v1608831917/DiscoverIt/default_profile_pic.jpg`,
     }).save();
 
     // Generate the token
@@ -189,10 +181,33 @@ exports.getUserDetails = async (req, res) => {
 };
 
 exports.uploadImage = async (req, res, next) => {
+  // If the uploaded file empty or text
   if (!req.file) {
     return res.status(500).json({ message: "Cannot upload " });
   }
-  const imageUrl = `${HOST_URL}/images/${req.file.filename}`;
+  // Upload to cloudinary
+  let streamUpload = (req) => {
+    return new Promise((resolve, reject) => {
+      let stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "DiscoverIt",
+        },
+        (error, result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(error);
+          }
+        }
+      );
+      // turn the buffer into a readable stream
+      streamifier.createReadStream(req.file.buffer).pipe(stream);
+    });
+  };
+
+  const uploadResult = await streamUpload(req);
+
+  const imageUrl = uploadResult.secure_url;
   try {
     // get the current user and Add the image to it
     const user = await User.findOne({ email: req.user.email });

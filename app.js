@@ -16,7 +16,7 @@ const port = process.env.PORT || 8080;
 const dbPass = process.env.DB_PASS;
 
 ///////////////// Disk Storage /////////////////
-const fileStorage = multer.diskStorage({
+/* const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
   },
@@ -24,10 +24,10 @@ const fileStorage = multer.diskStorage({
     const currData = new Date().toISOString().split(":").join("-");
     cb(null, currData + "-" + file.originalname.replace(/ /g, "-"));
   },
-});
+}); */
 
 // Filter uploaded files based on its type
-const fileFilter = (req, file, cb) => {
+/* const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
     file.mimetype === "image/jpeg" ||
@@ -37,7 +37,7 @@ const fileFilter = (req, file, cb) => {
   } else {
     cb(null, false);
   }
-};
+}; */
 
 ///// Parse the body //////
 ////////////////////////////
@@ -51,7 +51,10 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 // Use multer to upload files
 app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+  // To save images to the server
+  // multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+  // To save images in memory, so we can upload it to any external api
+  multer().single("image")
 );
 
 // By default, all the clients are restricted to access the server/REST api endpoints

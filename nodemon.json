@@ -1,5 +1,6 @@
 {
     "env": {
-        "DB_PASS": "vT3dDbh5J3gH8Hz"
+        "DB_PASS": "vT3dDbh5J3gH8Hz",
+        "CLOUDINARY_URL":"cloudinary://951849394664776:E8m4ykD9_2bw9AwjiDx2bOO9qh8@sahlkhalifa"
     }
 }
