@@ -1,5 +1,6 @@
 // Get the DB post model
 const Scream = require("../models/scream");
+const User = require("../models/user");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
 
